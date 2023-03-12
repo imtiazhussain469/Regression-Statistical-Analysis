@@ -1,0 +1,71 @@
+---
+title: "project_2"
+output: html_document
+date: "2023-03-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## loading data and coverting into respective data type
+
+```{r}
+setwd("C:/Users/A S Computer/Downloads")
+library("readxl")
+# xlsx files
+df <- read_excel("Project2Data.xlsx")
+
+df$`Job Title` = as.factor(df$`Job Title`)
+df$Salary = as.numeric(df$Salary)
+df$YearsAtJob = as.numeric(df$YearsAtJob)
+df$Age = as.numeric(df$Age)
+df$Location = as.factor(df$Location)
+df$Gender = as.factor(df$Gender)
+
+```
+
+## Run a T-Test to identify if there are disparities between male and female salaries
+
+```{r}
+### Run a T-Test to identify if there are disparities between male and female salaries
+
+t.test(df$Salary~df$Gender)
+
+```
+
+## Run a linear regression to identify which variables are important predictors in salary
+
+```{r}
+
+### Run a linear regression to identify which variables are important predictors in salary
+
+model = lm(Salary ~ `Job Title` + YearsAtJob + Age + Location + Gender, df)
+
+summary(model)
+
+
+model = lm(Salary ~ `Job Title`  + Age + Location , df)
+
+summary(model)
+
+par(mfrow=c(2,2))
+
+plot(model)
+
+```
+
+## Run a Jarque-Bera Test to test for normality
+
+```{r}
+### Run a Jarque-Bera Test to test for normality
+
+library(tseries)
+
+jarque.bera.test(df$Salary)
+
+jarque.bera.test(df$Age)
+
+jarque.bera.test(df$YearsAtJob)
+
+```
